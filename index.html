@@ -35,7 +35,7 @@
         <h1>Bac Number Results</h1>
         <div class="form-group">
             <label for="bacNumber">Enter Bac Number:</label>
-            <input type="number" id="bacNumber" placeholder="e.g., 11252">
+            <input type="number" id="bacNumber" placeholder="e.g., 06245">
         </div>
         <button onclick="getResult()">Get Result</button>
         <div class="result">
@@ -52,7 +52,9 @@
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return await response.json();
+                const data = await response.json();
+                console.log('Fetched data:', data); // Debugging statement
+                return data;
             } catch (error) {
                 console.error('Error fetching JSON:', error);
                 return [];
@@ -63,17 +65,31 @@
         async function getResult() {
             try {
                 const data = await fetchJSON();
-                const bacNumber = parseInt(document.getElementById('bacNumber').value, 10);
+                console.log('Data in getResult:', data); // Debugging statement
+
+                const bacNumber = document.getElementById('bacNumber').value;
                 
-                // Ensure the input is valid
-                if (isNaN(bacNumber)) {
+                if (!bacNumber) {
                     document.getElementById('average').innerText = 'Average: Invalid input';
                     document.getElementById('decision').innerText = 'Decision: Invalid input';
                     return;
                 }
                 
-                // Find the record for the given Bac number
-                const record = data.find(item => item.bacNumber === bacNumber);
+                const record = data.find(item => item.Num_Bac === bacNumber);
                 
                 if (record) {
-                    document.getElementById('average').innerText = 'Average: ' + record.average;
+                    document.getElementById('average').innerText = 'Average: ' + record.Moy_Bac;
+                    document.getElementById('decision').innerText = 'Decision: ' + record.Decision;
+                } else {
+                    document.getElementById('average').innerText = 'Average: Not found';
+                    document.getElementById('decision').innerText = 'Decision: Not found';
+                }
+            } catch (error) {
+                console.error('Error processing data:', error);
+                document.getElementById('average').innerText = 'Average: Error';
+                document.getElementById('decision').innerText = 'Decision: Error';
+            }
+        }
+    </script>
+</body>
+</html>
