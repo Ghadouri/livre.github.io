@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Number Averager</title>
+    <title>Bac Number Results</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,12 +32,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>Number Averager</h1>
+        <h1>Bac Number Results</h1>
         <div class="form-group">
-            <label for="numbers">Enter numbers (comma-separated):</label>
-            <input type="text" id="numbers" placeholder="e.g., 70, 80, 90">
+            <label for="bacNumber">Enter Bac Number:</label>
+            <input type="number" id="bacNumber" placeholder="e.g., 1">
         </div>
-        <button onclick="calculate()">Calculate</button>
+        <button onclick="getResult()">Get Result</button>
         <div class="result">
             <p id="average">Average: </p>
             <p id="decision">Decision: </p>
@@ -45,21 +45,36 @@
     </div>
 
     <script>
-        function calculate() {
-            const input = document.getElementById('numbers').value;
-            const numbers = input.split(',').map(num => parseFloat(num.trim())).filter(num => !isNaN(num));
-            
-            if (numbers.length === 0) {
-                alert('Please enter some numbers.');
-                return;
+        // Load JSON data from the file
+        async function fetchJSON() {
+            const response = await fetch('tableConvert.com_u32tuc.json');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+            return await response.json();
+        }
 
-            const sum = numbers.reduce((acc, num) => acc + num, 0);
-            const avg = sum / numbers.length;
-            const decision = avg >= 70 ? 'Pass' : 'Fail';
-
-            document.getElementById('average').innerText = 'Average: ' + avg.toFixed(2);
-            document.getElementById('decision').innerText = 'Decision: ' + decision;
+        // Function to get result based on Bac number
+        async function getResult() {
+            try {
+                const data = await fetchJSON();
+                const bacNumber = parseInt(document.getElementById('bacNumber').value);
+                
+                // Find the record for the given Bac number
+                const record = data.find(item => item.bacNumber === bacNumber);
+                
+                if (record) {
+                    document.getElementById('average').innerText = 'Average: ' + record.average;
+                    document.getElementById('decision').innerText = 'Decision: ' + record.decision;
+                } else {
+                    document.getElementById('average').innerText = 'Average: Not found';
+                    document.getElementById('decision').innerText = 'Decision: Not found';
+                }
+            } catch (error) {
+                console.error('Error fetching JSON:', error);
+                document.getElementById('average').innerText = 'Average: Error';
+                document.getElementById('decision').innerText = 'Decision: Error';
+            }
         }
     </script>
 </body>
