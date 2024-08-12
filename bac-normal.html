@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج رقم الباك</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            direction: rtl;
+        }
+        header, footer {
+            background-color: #0056b3;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        footer {
+            font-size: 16px;
+            padding: 15px;
+            position: relative;
+            margin-top: auto;
+        }
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin: 100px auto 30px; /* Adjusted top margin to accommodate fixed header */
+            max-width: 600px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+        h1 {
+            font-size: 28px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 18px;
+            transition: border-color 0.3s;
+        }
+        input[type="number"]:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #0056b3;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #003d7a;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 2px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .result p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        ريمباك
+    </header>
+    <div class="container">
+        <h1>نتائج رقم الباك</h1>
+        <div class="form-group">
+            <label for="bacNumber">أدخل رقم الباك:</label>
+            <input type="number" id="bacNumber" placeholder="مثال، 06245">
+        </div>
+        <button onclick="getResult()">الحصول على النتيجة</button>
+        <div class="result">
+            <p id="moyenne">المعدل: </p>
+            <p id="decision">القرار: </p>
+        </div>
+    </div>
+    <footer>
+        صنع بواسطة قدوري
+    </footer>
+
+    <script>
+        // رابط مباشر للملف JSON على GitHub Pages
+        const jsonUrl = 'https://Ghadouri.github.io/tableConvert.com_u32tuc.json';
+
+        // تحميل بيانات JSON من الرابط
+        async function fetchJSON() {
+            try {
+                const response = await fetch(jsonUrl);
+                if (!response.ok) {
+                    throw new Error('استجابة الشبكة لم تكن جيدة');
+                }
+                const data = await response.json();
+                console.log('البيانات التي تم جلبها:', data); // تصحيح
+                return data;
+            } catch (error) {
+                console.error('خطأ في جلب JSON:', error);
+                return [];
+            }
+        }
+
+        // دالة للحصول على النتيجة بناءً على رقم الباك
+        async function getResult() {
+            try {
+                const data = await fetchJSON();
+                console.log('البيانات في getResult:', data); // تصحيح
+
+                const bacNumber = document.getElementById('bacNumber').value.trim();
+                console.log('رقم الباك المدخل:', bacNumber);
+
+                if (!bacNumber) {
+                    document.getElementById('moyenne').innerText = 'المعدل: إدخال غير صالح';
+                    document.getElementById('decision').innerText = 'القرار: إدخال غير صالح';
+                    return;
+                }
+
+                const record = data.find(item => item.Num_Bac === bacNumber);
+                console.log('السجل المطابق:', record); // تصحيح
+
+                if (record) {
+                    document.getElementById('moyenne').innerText = 'المعدل: ' + record.Moy_Bac;
+                    document.getElementById('decision').innerText = 'القرار: ' + record.Decision;
+                } else {
+                    document.getElementById('moyenne').innerText = 'المعدل: غير موجود';
+                    document.getElementById('decision').innerText = 'القرار: غير موجود';
+                }
+            } catch (error) {
+                console.error('خطأ في معالجة البيانات:', error);
+                document.getElementById('moyenne').innerText = 'المعدل: خطأ';
+                document.getElementById('decision').innerText = 'القرار: خطأ';
+            }
+        }
+    </script>
+</body>
+</html>
