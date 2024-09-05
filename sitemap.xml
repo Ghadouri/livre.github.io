@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://ghadouri.github.io/livre.github.io/</loc>
+    <lastmod>2024-09-05</lastmod>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Bac Normal Results Page -->
+  <url>
+    <loc>https://ghadouri.github.io/livre.github.io/bac-normal.html</loc>
+    <lastmod>2024-09-05</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Bac Complémentaire Results Page -->
+  <url>
+    <loc>https://ghadouri.github.io/livre.github.io/bac-complementaire.html</loc>
+    <lastmod>2024-09-05</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Bac Excellence Results Page -->
+  <url>
+    <loc>https://ghadouri.github.io/livre.github.io/bac-excellence.html</loc>
+    <lastmod>2024-09-05</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
